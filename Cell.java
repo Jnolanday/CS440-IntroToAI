@@ -4,7 +4,13 @@ public class Cell {
 	private int myY;
 	private boolean myVisited;
 	private int myCellType;
-	
+	/*Cell Types:
+                0 - blocked
+                1 - unblocked
+                2- htt
+                3- unblocked highway
+                4- htt highway
+         */
 	private int[][] myNeighbors = new int[3][3];
 	
 	// constructor
@@ -61,7 +67,23 @@ public class Cell {
 		
 		myCellType = newCellType;
 	}
-	
+	  public void setHighway(){
+            if(myCellType==1){
+                this.setCellType(3);
+            }else if(myCellType==2){
+                this.setCellType(4);
+            }
+        }
+        public String cellTypeToStr(){
+            switch(myCellType){
+                case 0: return "0";
+                case 1: return "1";
+                case 2: return "2";
+                case 3: return "a";
+                case 4: return "b";
+                default: return "1";
+            }
+        }
 	/*
 	 TODO: Implement this method using Grid class
 	void setNeighbors(){
