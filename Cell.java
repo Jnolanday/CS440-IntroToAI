@@ -1,20 +1,23 @@
+package structures;
+
 public class Cell {
 	
 	private int myX;
 	private int myY;
 	private boolean myVisited;
 	private int myCellType;
-	/*Cell Types:
+            /*Cell Types:
                 0 - blocked
                 1 - unblocked
                 2- htt
                 3- unblocked highway
                 4- htt highway
-         */
+            */
+	
 	private int[][] myNeighbors = new int[3][3];
 	
 	// constructor
-	public Cell(int x, int y, int cellType){
+	public Cell(int x, int y, int cellType){        
 		
 		myX = x;
 		myY = y;
@@ -26,52 +29,60 @@ public class Cell {
 		//setNeighbors();
 	}
 	
-	private int getX(){
+	public int getX(){
 		
 		return myX;
 	}
 	
-	private int getY(){
+	public int getY(){
 		
 		return myY;
 	}
 	
-	private boolean getVisited(){
+	public boolean getVisited(){
 		
 		return myVisited;
 	}
 	
-	private int getCellType(){
+	public int getCellType(){
 		
 		return myCellType;
 	}
 	
-	private int[][] getNeighbors(){
+	public int[][] getNeighbors(){
 		
 		return myNeighbors;
 	}
 	
-	private void setX(int x){
+	public void setX(int x){
 		myX = x;
 	}
 	
-	private void setY(int y){
+	public void setY(int y){
 		myY = y;
 	}
 	
-	private void setVisited(boolean vis){
+	public void setVisited(boolean vis){
 		myVisited = vis;
 	}
 	
-	private void setCellType(int newCellType){
+	public void setCellType(int newCellType){
 		
 		myCellType = newCellType;
 	}
-	  public void setHighway(){
+	
+        public void setHighway(){
             if(myCellType==1){
                 this.setCellType(3);
             }else if(myCellType==2){
                 this.setCellType(4);
+            }
+        }
+        public void removeHighway(){
+            if(myCellType==3){
+                this.setCellType(1);
+            }else if(myCellType==4){
+                this.setCellType(2);
             }
         }
         public String cellTypeToStr(){
@@ -100,3 +111,4 @@ public class Cell {
 	
 	*/
 }
+
