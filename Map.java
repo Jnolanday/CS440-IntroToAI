@@ -1,6 +1,11 @@
 import java.awt.Point;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class Map {
 	private Point sstart;
@@ -24,6 +29,33 @@ public class Map {
                 placeBlocks();
 		placeStartGoal();
 	}
+	public Map(String file_path) throws IOException{
+            httCenters = new Point[8];
+            map = new Cell[120][160]; // first initialize 120x160 grid
+
+		// initialize all cells as unblocked
+		for (int row = 0; row < 120; row++) {
+			for (int col = 0; col < 160; col++) {
+				map[row][col] = new Cell(row,col,1);
+			}
+		}
+
+            String contents = Files.lines(Paths.get(file_path)).collect(Collectors.joining("\n"));
+            String[] lines = contents.split("\n");
+            sstart = strToPoint(lines[0]);
+            sgoal = strToPoint(lines[1]);
+            
+            for(int i = 0; i < httCenters.length;i++){
+                httCenters[i] = strToPoint(lines[i+2]);
+            }
+            for(int r = 10; r < lines.length;r++){
+                for(int c = 0; c < lines[r].length(); c++){
+                    Cell cell = new Cell(r-10,c,1);
+                    cell.setCellType(lines[r].charAt(c));
+                    map[r-10][c]= cell;
+                }
+            }
+        }
         public Point getStart(){
             return sstart;
         }
@@ -59,6 +91,30 @@ public class Map {
 			}
 			System.out.println();
 		}
+        }
+	
+	public void fileOutput(String file_name) throws IOException{
+            String file = "./"+file_name+".txt";
+            ArrayList<String> lines = new ArrayList<>();
+            lines.add("("+(int)sstart.getX()+","+(int)sstart.getY()+")");
+            lines.add("("+(int)sgoal.getX()+","+(int)sgoal.getY()+")");
+            for (Point httCenter : httCenters) {
+                lines.add("("+(int)httCenter.getX()+","+(int)httCenter.getY()+")");
+            }
+            for(int row = 0; row < map.length; row++){
+                String str = new String();
+                for(int col = 0;col<map[row].length; col++){
+                   str = str.concat(map[row][col].cellTypeToStr());
+                }
+                lines.add(str);
+            }
+            Path write = Files.write(Paths.get(file), lines);
+    
+         }
+	private Point strToPoint(String str){
+            String valX = str.substring(str.indexOf("(")+1,str.indexOf(","));
+            String valY = str.substring(str.indexOf(",")+1,str.indexOf(")"));
+            return new Point(Integer.parseInt(valX),Integer.parseInt(valY));
         }
         
 	private void placeHTTs() {
