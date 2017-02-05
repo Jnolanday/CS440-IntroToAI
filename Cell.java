@@ -71,6 +71,23 @@ public class Cell {
 		myCellType = newCellType;
 	}
 	
+	public void setCellType(char type){
+            switch(type){
+                case '0': myCellType = 0;
+                          break;
+                case '1': myCellType = 1;
+                          break;
+                case '2': myCellType = 2;
+                          break;  
+                case 'a': myCellType = 3;
+                          break;
+                case 'b': myCellType = 4;
+                          break;
+                default : myCellType = 1;
+                          break;
+            }    
+        }
+	
         public void setHighway(){
             if(myCellType==1){
                 this.setCellType(3);
