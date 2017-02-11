@@ -1,3 +1,5 @@
+package structures;
+
 import java.awt.Point;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,6 +14,7 @@ public class Map {
 	private Point sgoal;
 	private Point[] httCenters;
 	private Cell[][] map;
+        private ArrayList<Cell> path;
 
 	public Map() { // Generates new RANDOM Map w/o input
 		map = new Cell[120][160]; // first initialize 120x160 grid
@@ -22,14 +25,15 @@ public class Map {
 				map[row][col] = new Cell(row,col,1);
 			}
 		}
-
+                
                 //fills map
 		placeHTTs();
 		placeHighways();
                 placeBlocks();
 		placeStartGoal();
 	}
-	public Map(String file_path) throws IOException{
+        public Map(String file_path) throws IOException{
+            path = new ArrayList<>();
             httCenters = new Point[8];
             map = new Cell[120][160]; // first initialize 120x160 grid
 
@@ -56,10 +60,34 @@ public class Map {
                 }
             }
         }
-        public Point getStart(){
+        public void setPath(ArrayList<Cell> p){
+            path = p;
+        }
+        public ArrayList<Cell> getPath(){
+            return path;
+        }
+        public void setStart(Point p){
+            sstart = p;
+        }
+        public void setStart(int x, int y){
+            sstart = new Point(x,y);
+        }
+        public void setGoal(Point p){
+            sgoal = p;
+        }
+        public void setGoal(int x, int y){
+            sgoal = new Point(x,y);
+        }
+        public Cell getStart(){
+            return map[sstart.x][sstart.y];
+        }
+        public Cell getGoal(){
+            return map[sgoal.x][sgoal.y];
+        }
+        public Point getStartPoint(){
             return sstart;
         }
-        public Point getGoal(){
+        public Point getGoalPoint(){
             return sgoal;
         }
         public Point[] getHtts(){
@@ -75,7 +103,9 @@ public class Map {
          public void display(){
             for (int row = 0; row < 120; row++) {
 			for (int col = 0; col < 160; col++) {
-                                if(sstart.equals(new Point(row,col))){
+                                if(path.contains(map[row][col])){
+                                    System.out.print("\u001B[43m"+map[row][col].cellTypeToStr()+" ");
+                                }else if(sstart.equals(new Point(row,col))){
                                     System.out.print("\u001B[41m"+"S "+"\u001B[0m");
                                 }else if(sgoal.equals(new Point(row,col))){
                                     System.out.print("\u001B[42m"+"G "+"\u001B[0m");
@@ -85,15 +115,15 @@ public class Map {
                                     System.out.print("\u001B[46m"+"a"+"\u001B[0m"+ " ");
                                 }else if(map[row][col].getCellType()==4){
                                     System.out.print("\u001B[44m"+"b"+"\u001B[0m"+" ");
-                                }else{
+                                }else {
                                     System.out.print(map[row][col].cellTypeToStr()+" ");
                                 }
 			}
 			System.out.println();
 		}
         }
-	
-	public void fileOutput(String file_name) throws IOException{
+        
+        public void fileOutput(String file_name) throws IOException{
             String file = "./"+file_name+".txt";
             ArrayList<String> lines = new ArrayList<>();
             lines.add("("+(int)sstart.getX()+","+(int)sstart.getY()+")");
@@ -111,12 +141,12 @@ public class Map {
             Path write = Files.write(Paths.get(file), lines);
     
          }
-	private Point strToPoint(String str){
+        
+        private Point strToPoint(String str){
             String valX = str.substring(str.indexOf("(")+1,str.indexOf(","));
             String valY = str.substring(str.indexOf(",")+1,str.indexOf(")"));
             return new Point(Integer.parseInt(valX),Integer.parseInt(valY));
         }
-        
 	private void placeHTTs() {
 		httCenters = new Point[8];
 		Random rand = new Random();
@@ -359,7 +389,7 @@ public class Map {
 		return map[(int) p.getX()][(int) p.getY()].getCellType()==3||map[(int) p.getX()][(int) p.getY()].getCellType()==4;
 	}
 
-	private boolean withinBorder(Point p) {
+	public boolean withinBorder(Point p) {
 		return (p.x >= 0 && p.x < 120 && p.y >= 0 && p.y < 160);
 	}
 
@@ -368,6 +398,4 @@ public class Map {
 	}
 
 }
-
-
 
