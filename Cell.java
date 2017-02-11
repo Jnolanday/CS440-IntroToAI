@@ -1,10 +1,12 @@
-package structures;
+ackage structures;
+import java.awt.Point;
+import static java.lang.Integer.MAX_VALUE;
+//import structures.Map;
 
 public class Cell {
 	
 	private int myX;
 	private int myY;
-	private boolean myVisited;
 	private int myCellType;
             /*Cell Types:
                 0 - blocked
@@ -13,8 +15,9 @@ public class Cell {
                 3- unblocked highway
                 4- htt highway
             */
+	private double f,g,h;
+        private Cell parent;
 	
-	private int[][] myNeighbors = new int[3][3];
 	
 	// constructor
 	public Cell(int x, int y, int cellType){        
@@ -23,11 +26,38 @@ public class Cell {
 		myY = y;
 		myCellType = cellType;
 		
-		// sets middle neighbor cell to -1 (represents our current cell)
-		myNeighbors[1][1] = -1;
+                f = -1;
+                h = -1;
+                g = MAX_VALUE;
+                parent = null;
 		
-		//setNeighbors();
 	}
+        public double getF(){
+            return f;
+        }
+        public double getG(){
+            return g;
+        }
+        public double getH(){
+            return h;
+        }
+        
+        public Cell getParent(){
+            return parent;
+        }
+        
+        public void setF(double i){
+            f = g+i;
+        }
+        public void setG(double i){
+            g = i;
+        }
+        public void setH(double i){
+            h = i;
+        }
+        public void setParent(Cell c){
+            parent = c;
+        }
 	
 	public int getX(){
 		
@@ -38,40 +68,33 @@ public class Cell {
 		
 		return myY;
 	}
-	
-	public boolean getVisited(){
-		
-		return myVisited;
-	}
-	
-	public int getCellType(){
-		
-		return myCellType;
-	}
-	
-	public int[][] getNeighbors(){
-		
-		return myNeighbors;
-	}
-	
-	public void setX(int x){
+        
+        public void setX(int x){
 		myX = x;
 	}
 	
 	public void setY(int y){
 		myY = y;
 	}
+        public Point getLocation(){
+            return new Point(myX,myY);
+        }
 	
-	public void setVisited(boolean vis){
-		myVisited = vis;
+        public void setLocation(Point p){
+            myX = (int)p.getX();
+            myY = (int)p.getY();
+        }
+	
+	public int getCellType(){
+		
+		return myCellType;
 	}
 	
 	public void setCellType(int newCellType){
 		
 		myCellType = newCellType;
 	}
-	
-	public void setCellType(char type){
+        public void setCellType(char type){
             switch(type){
                 case '0': myCellType = 0;
                           break;
@@ -104,7 +127,7 @@ public class Cell {
         }
         public String cellTypeToStr(){
             switch(myCellType){
-                case 0: return "0";
+                case 0: return "\u001B[47m"+"b"+"\u001B[0m";
                 case 1: return "1";
                 case 2: return "2";
                 case 3: return "a";
@@ -112,9 +135,17 @@ public class Cell {
                 default: return "1";
             }
         }
-	/*
-	 TODO: Implement this method using Grid class
-	void setNeighbors(){
+        public String toString(){
+            return "<html>x: "+myX
+                    + "<br>y: "+myY
+                    + "<br>h: "+h
+                    + "<br>f "+f;
+                    
+        }
+        
+        
+	
+	/*public void setNeighbors(Map map){
 		
 		myNeighbors[0][0] = map.getCell(myX-1, myY-1);
 		myNeighbors[0][1] = map.getCell(myX, myY-1);
@@ -124,8 +155,7 @@ public class Cell {
 		myNeighbors[2][0] = map.getCell(myX-1, myY+1);
 		myNeighbors[2][1] = map.getCell(myX, myY+1);
 		myNeighbors[2][2] = map.getCell(myX+1, myY+1);
-	}
+	}*/
 	
-	*/
 }
 
