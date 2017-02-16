@@ -1,4 +1,5 @@
-ackage structures;
+package assignment1;
+
 import java.awt.Point;
 import static java.lang.Integer.MAX_VALUE;
 //import structures.Map;
@@ -17,6 +18,7 @@ public class Cell {
             */
 	private double f,g,h;
         private Cell parent;
+    private int cellID;
 	
 	
 	// constructor
@@ -110,6 +112,16 @@ public class Cell {
                           break;
             }    
         }
+        
+        public void setCellID(int newID)
+        {
+        	cellID = newID;
+        }
+        
+        public int getCellID()
+        {
+        	return cellID;
+        }
 	
         public void setHighway(){
             if(myCellType==1){
@@ -140,7 +152,6 @@ public class Cell {
                     + "<br>y: "+myY
                     + "<br>h: "+h
                     + "<br>f "+f;
-                    
         }
         
         
@@ -158,4 +169,3 @@ public class Cell {
 	}*/
 	
 }
-

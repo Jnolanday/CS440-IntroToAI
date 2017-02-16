@@ -1,19 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package structures;
-
+package assignment1;
 
 import java.awt.Point;
 import static java.lang.Float.MAX_VALUE;
 import java.util.ArrayList;
-import structures.*;
+import assignment1.*;
 import java.util.PriorityQueue;
 import java.util.function.Predicate;
 
 public class AStar {
+	
      private PriorityQueue<Cell> fringe;
      private ArrayList<Cell> closed;
      private Map map;
@@ -22,33 +17,65 @@ public class AStar {
      private ArrayList<Cell> succ;
      private ArrayList<Cell> path;
      
-     public AStar(Map m,double heuristic){ //HEURISTIC WILL BE A STRING??
+     public AStar(Map m, double heuristic){ //HEURISTIC WILL BE A STRING??
          map = m;
          sStart = m.getStart();
          sGoal = m.getGoal();
-        for(int r=0;r<120;r++){
+         
+         int idCount = 0;
+         
+         for(int r=0;r<120;r++){
             for(int c = 0; c<160;c++){
                 map.getMap()[r][c].setG((double)sStart.getLocation().distance(r,c));
                 map.getMap()[r][c].setH(heuristic);
                 map.getMap()[r][c].setF(map.getMap()[r][c].getH());
+                map.getMap()[r][c].setCellID(idCount);
+                idCount++;
             }
         }
+        
+        calculateHEuclidian(map.getGoal());
         sStart.setG(0);
         sStart.setParent(sStart);
-        fringe = new PriorityQueue<>(19200,new FringeComparator());
+        fringe = new PriorityQueue<>(19200, new FringeComparator());
         fringe.add(sStart);
-        closed = new ArrayList<>();
-        path = new ArrayList<>();
+        closed = new ArrayList<Cell>();
+        path = new ArrayList<Cell>();
      }
      
-     public int exe(){
-         Cell s;
+     
+     void calculateHEuclidian(Cell end){
+ 		
+ 		for(int i = 0; i < 120; i++)
+ 		{
+ 			for(int j = 0; j < 160; j++)
+ 			{
+ 				Cell cell = map.getCell(i, j);
+ 				
+ 				cell.setH(Math.abs(Math.sqrt((cell.getX()-end.getX())*(cell.getX()-end.getX()) +
+ 						(cell.getY()-end.getY())*(cell.getY()-end.getY()))));	
+ 				
+ 				//System.out.println("Cell H(n) at (" + i + ", " + j + "): " + cell.getH());
+ 				
+ 				if(i == end.getX()  && j == end.getY())
+ 				{
+ 					System.out.println("H(n) == 0? --> " + cell.getH());
+ 				}
+ 			}
+ 		}
+ 	
+ 	
+ 	}
+    public int exe(){
+    	
+    	 Cell s;
          while(!fringe.isEmpty()){
              s = fringe.poll();
              
              //System.out.println("Entered s to fringe: "+ s.getLocation().toString());
-             if(s.equals(sGoal)){
+             if(s.getCellID() == sGoal.getCellID()){
                  
+            	 System.out.println("Path found!");
                  return 1;
              }
              closed.add(s);
@@ -78,6 +105,7 @@ public class AStar {
          
          return 0;
      }
+     
      public ArrayList<Cell> getPath(){
          return path;
      }
@@ -125,7 +153,7 @@ public class AStar {
         if(map.withinBorder(new Point(x,y+1))){
             succ.add(map.getCell(x,y+1));
         }
-        //botton left
+        //bottom left
         if(map.withinBorder(new Point(x+1,y-1))){
             succ.add(map.getCell(x+1,y-1));
         }
