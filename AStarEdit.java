@@ -24,6 +24,7 @@ public class AStar {
      private ArrayList<Cell> succ;
      private ArrayList<Cell> path;
      private double[] f,g,h;
+     private Cell[] parent;
      
      public AStar(Map m, double heuristic){ //HEURISTIC WILL BE A STRING??
          map = m;
@@ -50,7 +51,7 @@ public class AStar {
         calculateHEuclidian(map.getGoal());
         g[sStart.getCellID()] = 0;
 //        sStart.setG(0);
-        sStart.setParent(sStart);
+        parent[sStart.getCellID()] = sStart;
         fringe = new PriorityQueue<>(19200, new FringeComparator());
         fringe.add(sStart);
         closed = new ArrayList<>();
@@ -112,7 +113,7 @@ public class AStar {
                          //System.out.println("\t"+"Successor is not in fringe!");
                          g[s1.getCellID()] = MAX_VALUE;
 //                         s1.setG(MAX_VALUE);
-                         s1.setParent(null);
+                         parent[s1.getCellID()]=null;                        
                      }
                     //System.out.println("Updating successor of s!");
                     UpdateVertex(s,s1);
@@ -130,17 +131,17 @@ public class AStar {
      }
      private void setPath(){
          Cell goal = fringe.poll();
-         Cell parent = goal.getParent();
+         Cell par = parent[goal.getCellID()];
          path.add(goal);
-         while(parent!=null){
-             path.add(parent);
-             parent = parent.getParent();
+         while(par!=null){
+             path.add(par);
+             par = parent[par.getCellID()];
          }
      }
      private void UpdateVertex(Cell s,Cell s1){
          if((g[s.getCellID()]+c(s,s1))<g[s1.getCellID()]){
              g[s1.getCellID()]=g[s.getCellID()]+c(s,s1);
-             s1.setParent(s);             
+             parent[s1.getCellID()] = s;                      
              if(fringe.contains(s1)){
                  fringe.remove(s1);
              }
@@ -338,3 +339,4 @@ public class AStar {
          
      }
 }
+
