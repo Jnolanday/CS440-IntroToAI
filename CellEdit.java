@@ -16,7 +16,6 @@ public class Cell {
                 4- htt highway
             */
 	
-        private Cell parent;
         private int cellID;
 	
 	
@@ -27,21 +26,11 @@ public class Cell {
 		myY = y;
 		myCellType = cellType;
 		
-               
-                parent = null;
 		
 	}
       
        
-        
-        public Cell getParent(){
-            return parent;
-        }
-        
-      
-        public void setParent(Cell c){
-            parent = c;
-        }
+  
 	
 	public int getX(){
 		
