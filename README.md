@@ -2,6 +2,9 @@
 ### Assignment 1: Heuristic Search Through Procedurally Generated 2D Maps
 By Mike Allen and Jarisha Olanday
 
+## Description
+Java Program that procedurally generates a 2D Map of 4 different types of terrain(normal, hard-to-traverse, blocked, and highway) with a randomly generated start and endpoint. Using heuristic search algorthims (A*), the shortest path from the start to endpoint is found.
+
 ## Program Design & Implementation
 This section is a guide to our design and implementation of our pathfinding project. Our code for this project is written in Java, which allows us to easily take advantage of the JFrame, javax.swing, java.awt, and related packages. These features in Java are what allowed us to create our graphical user interface (GUI) in an effective and relatively simple manner. Our code consists of a few main classes, each described in detail below.
 
